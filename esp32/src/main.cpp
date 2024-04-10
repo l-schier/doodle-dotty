@@ -29,7 +29,7 @@ constexpr char SSID_PASSWORD[] = "RobotRocks";
 WiFiUDP Udp;
 
 //Receiver IP-address and port
-IPAddress RECEIVER_IP_ADDRESS (0, 0, 0, 0);
+IPAddress RECEIVER_IP_ADDRESS (10, 126, 128, 222);
 constexpr int RECEIVER_PORT = 50195;
 constexpr int LOCAL_PORT = 3002;
 
@@ -75,6 +75,7 @@ void setup() {
     delay(1000);
   }
   Serial.println("Connected to WiFi");
+  Serial.println("IP address: " + WiFi.localIP().toString());
 
   /* UDP */
   //Begin UDP
