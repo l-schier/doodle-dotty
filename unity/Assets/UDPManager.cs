@@ -52,12 +52,12 @@ public class UDPManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            SendUDPMessage("LED|1", "10.126.128.155", 3002);
+            SendUDPMessage("X|10", "10.126.128.155", 3002);
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            SendUDPMessage("LED|0", "10.126.128.155", 3002);
+            SendUDPMessage("Y|10", "10.126.128.155", 3002);
         }
     }
 
@@ -75,23 +75,17 @@ public class UDPManager : MonoBehaviour
         // Splitting the receivedData string by the '|' character
         string[] parts = receivedData.Split('|');
 
-        if (parts.Length == 2) 
+        string sensorID = parts[0];
+        int value;
+        if (int.TryParse(parts[1], out value))
         {
-            string sensorID = parts[0];
-            int value;
-            if (int.TryParse(parts[1], out value))
-            {
-                potentiometerValue = value;
-            }
-            else
-            {
-                Debug.LogError("Failed to parse the value as an integer.");
-            }
+            potentiometerValue = value;
         }
         else
         {
-            Debug.LogError("Received data is not in the expected format.");
+            Debug.LogError("Failed to parse the value as an integer.");
         }
+        
 
         udpClient.BeginReceive(ReceiveCallback, null);
     }
@@ -138,11 +132,12 @@ public class UDPManager : MonoBehaviour
             Debug.LogError("Error fetching local IP address: " + ex.Message);
         }
     }
+    
     private void OnDestroy()
     {
         if (udpClient != null)
         {
-        	udpClient.Close();
-	}
+            udpClient.Close();
+        }
     }
 }
