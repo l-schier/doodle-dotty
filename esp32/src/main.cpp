@@ -29,7 +29,7 @@ constexpr char SSID_PASSWORD[] = "RobotRocks";
 WiFiUDP Udp;
 
 //Receiver IP-address and port
-IPAddress RECEIVER_IP_ADDRESS (10, 126, 128, 222);
+IPAddress RECEIVER_IP_ADDRESS (10, 126, 128, 65);
 constexpr int RECEIVER_PORT = 50195;
 constexpr int LOCAL_PORT = 3002;
 
@@ -103,7 +103,7 @@ void setPenState(int state) {
 
 /* Step Motor*/
 // move the X axis
-void moveX(int steps, int speed) {
+void moveX(int steps, int speed = 15) {
   xStepper.setSpeed(speed);
   xStepper.step(steps);
   UDPDataString = "X|" + String(steps) + "|" + String(speed);
@@ -111,7 +111,7 @@ void moveX(int steps, int speed) {
 }
 
 // move the Y axis
-void moveY(int steps, int speed) {
+void moveY(int steps, int speed = 15) {
   yStepper.setSpeed(speed);
   yStepper.step(steps);
   UDPDataString = "Y|" + String(steps) + "|" + String(speed);
@@ -156,20 +156,20 @@ void receiveUDPMessage() {
       value1 = atoi(part); // Convert string to integer
     }
     // Get the actuator value 2
-    part = strtok(NULL, "|");
-    if (part != NULL) {
-      value2 = atoi(part); // Convert string to integer
-    }
+    // part = strtok(NULL, "|");
+    // if (part != NULL) {
+    //   value2 = atoi(part); // Convert string to integer
+    // }
 
     // Set the LED state
     if(strcmp(actuatorID, "PEN") == 0) {
       setPenState(value1);
     }
     if(strcmp(actuatorID, "X") == 0) {
-      moveX(value1, value2);
+      moveX(value1);
     }
     if(strcmp(actuatorID, "Y") == 0) {
-      moveY(value1, value2);
+      moveY(value1);
     }
   }
 }

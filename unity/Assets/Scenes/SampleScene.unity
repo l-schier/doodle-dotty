@@ -154,6 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UDPPort: 50195
   displayUDPMessages: 1
+  ipAddress: 10.126.128.220
 --- !u!4 &213427293
 Transform:
   m_ObjectHideFlags: 0

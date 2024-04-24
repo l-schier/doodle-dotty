@@ -80,13 +80,14 @@ public class UDPManager : MonoBehaviour
         if (int.TryParse(parts[1], out value))
         {
             motorXValue = value;
+            Debug.Log("Motor " + parts[0] +  " Value: " + motorXValue);
         }
         else
         {
             Debug.LogError("Failed to parse the value as an integer.");
         }
         
-
+        Debug.Log("Beginning to receive again.");
         udpClient.BeginReceive(ReceiveCallback, null);
     }
 
