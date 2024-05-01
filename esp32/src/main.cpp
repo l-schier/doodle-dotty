@@ -20,16 +20,20 @@ Stepper yStepper(stepsPerRevolution, 4, 25, 32, 27);
 Servo penServo;
 const int servoPin = 2;
 
+/* Reset buttons */
+const int resetButtonPinX = 19;
+const int resetButtonPinY = 18;
+
 /* WiFi */
 //Network name (SSID) and password (WPA)
-constexpr char SSID_NAME[] = "ProjektNet";
-constexpr char SSID_PASSWORD[] = "RobotRocks";
+constexpr char SSID_NAME[] = "Erik";//"ProjektNet";
+constexpr char SSID_PASSWORD[] = "testtest";//"RobotRocks";
 
 /* UDP */
 WiFiUDP Udp;
 
 //Receiver IP-address and port
-IPAddress RECEIVER_IP_ADDRESS (10, 126, 128, 65);
+IPAddress RECEIVER_IP_ADDRESS (192, 168, 229, 243);
 constexpr int RECEIVER_PORT = 50195;
 constexpr int LOCAL_PORT = 3002;
 
@@ -66,6 +70,10 @@ void setup() {
   // attaches the servo to the used pin
 	penServo.attach(servoPin, 1000, 2000);
 
+  /* Reset buttons */
+  pinMode(resetButtonPinX, INPUT_PULLDOWN);
+  pinMode(resetButtonPinY, INPUT_PULLDOWN);
+
   /* WiFi */
   //Begin WiFi
   WiFi.begin(SSID_NAME, SSID_PASSWORD);
@@ -81,6 +89,23 @@ void setup() {
   //Begin UDP
   Udp.begin(LOCAL_PORT);
   Serial.println("UDP Begun");
+
+  /* Calibration */
+  // Move to the starting position
+  Serial.println("Calibrating...");
+  Serial.println("Calibrate X");
+  while(digitalRead(resetButtonPinX) == LOW) {
+    xStepper.setSpeed(15);
+    xStepper.step(1);
+  }
+  Serial.println("Calibrate Y");
+  while(digitalRead(resetButtonPinY) == LOW) {
+    yStepper.setSpeed(15);
+    yStepper.step(1);
+  }
+  Serial.println("Calibration done");
+
+
 }
 
 void loop() {
