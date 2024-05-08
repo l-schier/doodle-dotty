@@ -26,14 +26,14 @@ const int resetButtonPinY = 18;
 
 /* WiFi */
 //Network name (SSID) and password (WPA)
-constexpr char SSID_NAME[] = "Erik";//"ProjektNet";
-constexpr char SSID_PASSWORD[] = "testtest";//"RobotRocks";
+constexpr char SSID_NAME[] = "ProjektNet";//"Erik";
+constexpr char SSID_PASSWORD[] = "RobotRocks";//"testtest";
 
 /* UDP */
 WiFiUDP Udp;
 
 //Receiver IP-address and port
-IPAddress RECEIVER_IP_ADDRESS (192, 168, 229, 243);
+IPAddress RECEIVER_IP_ADDRESS (10, 126, 128, 65);
 constexpr int RECEIVER_PORT = 50195;
 constexpr int LOCAL_PORT = 3002;
 
