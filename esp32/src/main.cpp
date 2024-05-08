@@ -33,7 +33,7 @@ constexpr char SSID_PASSWORD[] = "RobotRocks";//"testtest";
 WiFiUDP Udp;
 
 //Receiver IP-address and port
-IPAddress RECEIVER_IP_ADDRESS (10, 126, 128, 65);
+IPAddress RECEIVER_IP_ADDRESS (10, 126, 17, 22);
 constexpr int RECEIVER_PORT = 50195;
 constexpr int LOCAL_PORT = 3002;
 
