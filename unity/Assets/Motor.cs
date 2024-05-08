@@ -52,12 +52,21 @@ public class Motor : MonoBehaviour
         Quaternion startRotation = transform.rotation;
 
         float deltaAngle = 0;
-
-        while (deltaAngle < angle)
+        if (angle > 0)
         {
-            deltaAngle +=  anglePerSecond * Time.deltaTime;
-            deltaAngle = Mathf.Min(deltaAngle, angle);
-            transform.rotation = startRotation * Quaternion.AngleAxis(deltaAngle, axis);
+            while (deltaAngle < angle)
+            {
+                deltaAngle +=  anglePerSecond * Time.deltaTime;
+                deltaAngle = Mathf.Min(deltaAngle, angle);
+                transform.rotation = startRotation * Quaternion.AngleAxis(deltaAngle, axis);
+            }
+        } else {
+            while (deltaAngle > angle)
+            {
+                deltaAngle +=  anglePerSecond * Time.deltaTime;
+                deltaAngle = Mathf.Max(deltaAngle, angle);
+                transform.rotation = startRotation * Quaternion.AngleAxis(deltaAngle, axis);
+            }
         }
     }
 }
