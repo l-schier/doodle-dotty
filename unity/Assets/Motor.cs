@@ -1,51 +1,72 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Motor : MonoBehaviour
 {
     [SerializeField] private char motorAxis = 'X';
-    [SerializeField] private float minInputValue = 0f;
-    [SerializeField] private float maxInputValue = 2048f;
-    [SerializeField] private float minRotationDegree = 0f;
-    [SerializeField] private float maxRotationDegree = 360f;
-
-    private float initialRotationX;
-    private float initialRotationY;
-    private float initialRotationZ;
-
-    [SerializeField] private float testValue = 0f;
-    [SerializeField] private bool useTestValue = false;
-
+    [SerializeField] private char motorDirection = 'X';
+    private Vector3 motorAxisVector;
+    //[SerializeField] private float degreesPerSecond = 360f
+    
     private void Awake()
     {
-        initialRotationX = transform.localEulerAngles.x;
-        initialRotationY = transform.localEulerAngles.y;
-        initialRotationZ = transform.localEulerAngles.z;
+
     }
     // Start is called before the first frame update
     void Start()
     {
-        
+        switch (motorAxis)
+        {
+            case 'X':
+                motorAxisVector = Vector3.right;
+                break;
+            case 'Y':
+                motorAxisVector = Vector3.up;
+                break;
+            case 'Z':
+                motorAxisVector = Vector3.forward;
+                break;
+            default:
+                Debug.LogError("Invalid motor axis");
+                break;
+        }
     }
 
     // Update is called once per frame
     void Update()
-    {
-        RotateObject(UDPManager.Instance.motorXValue);
+    {   
+        if (motorDirection == 'X' && UDPManager.Instance.motorXChange) {
+            RotateObject(UDPManager.Instance.motorXValue, motorAxisVector, 1);
+            UDPManager.Instance.motorXChange = false;
+        }
+        if (motorDirection == 'Y' && UDPManager.Instance.motorYChange) {
+            RotateObject(UDPManager.Instance.motorYValue, motorAxisVector, 1);
+            UDPManager.Instance.motorYChange = false;
+        }
     }
 
-    private void RotateObject(float value)
+    private void RotateObject(float steps, Vector3 axis, float inTime)
     {
-        float mappedRotation = MapValue(value, minInputValue, maxInputValue, minRotationDegree, maxRotationDegree);
+        float angle = steps / 5.625f;
+        float anglePerSecond = angle / inTime;
 
-        Vector3 rotationVector = new Vector3(initialRotationX, mappedRotation, initialRotationZ);
+        Quaternion startRotation = transform.rotation;
 
-        transform.localRotation = Quaternion.Euler(rotationVector);
-    }
-
-    private float MapValue(float value, float fromMin, float fromMax, float toMin, float toMax)
-    {
-        return Mathf.Lerp(toMin, toMax, Mathf.InverseLerp(fromMin, fromMax, value));
+        float deltaAngle = 0;
+        if (angle > 0)
+        {
+            while (deltaAngle < angle)
+            {
+                deltaAngle +=  anglePerSecond * Time.deltaTime;
+                deltaAngle = Mathf.Min(deltaAngle, angle);
+                transform.rotation = startRotation * Quaternion.AngleAxis(deltaAngle, axis);
+            }
+        } else {
+            while (deltaAngle > angle)
+            {
+                deltaAngle +=  anglePerSecond * Time.deltaTime;
+                deltaAngle = Mathf.Max(deltaAngle, angle);
+                transform.rotation = startRotation * Quaternion.AngleAxis(deltaAngle, axis);
+            }
+        }
     }
 }

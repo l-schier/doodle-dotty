@@ -154,7 +154,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UDPPort: 50195
   displayUDPMessages: 1
-  ipAddress: 10.126.128.220
+  ipAddress: 10.126.128.222
+  speed: 15
+  stepsPerPress: 100
 --- !u!4 &213427293
 Transform:
   m_ObjectHideFlags: 0
@@ -521,13 +523,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bce70c6923f85f9e82c4b351131ec47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  motorAxis: 88
-  minInputValue: 0
-  maxInputValue: 2048
-  minRotationDegree: 0
-  maxRotationDegree: 360
-  testValue: 0
-  useTestValue: 0
+  motorAxis: 89
+  motorDirection: 88
+  testValue: 100
+  useTestValue: 1
 --- !u!1 &1016727297
 GameObject:
   m_ObjectHideFlags: 0

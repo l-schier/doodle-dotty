@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -16,11 +14,16 @@ public class UDPManager : MonoBehaviour
     [SerializeField] private int UDPPort = 50195;
     [SerializeField] private bool displayUDPMessages = false;
     [SerializeField] private string ipAddress = "10.126.128.155";
+    [SerializeField] private int speed = 15;
+    [SerializeField] private int stepsPerPress = 100;
     private UdpClient udpClient;
     private IPEndPoint endPoint;
 
     // ESP32 Sensor
     public int motorXValue { get; private set; } = 0; 
+    public bool motorXChange { get; set; } = false;
+    public int motorYValue { get; private set; } = 0;
+    public bool motorYChange { get; set; } = false;
 
     void Awake()
     {
@@ -52,12 +55,26 @@ public class UDPManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            SendUDPMessage("X|10", ipAddress, 3002);
+            String message = "Y|" + stepsPerPress.ToString() + "|" + speed.ToString();
+            SendUDPMessage(message, ipAddress, 3002);
         }
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
+        {   
+            String message = "Y|-" + stepsPerPress.ToString() + "|" + speed.ToString();
+            SendUDPMessage(message, ipAddress, 3002);
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            SendUDPMessage("Y|10", ipAddress, 3002);
+            String message = "X|-" + stepsPerPress.ToString() + "|" + speed.ToString();
+            SendUDPMessage(message, ipAddress, 3002);
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            String message = "X|" + stepsPerPress.ToString() + "|" + speed.ToString();
+            SendUDPMessage(message, ipAddress, 3002);
         }
     }
 
@@ -75,12 +92,29 @@ public class UDPManager : MonoBehaviour
         // Splitting the receivedData string by the '|' character
         string[] parts = receivedData.Split('|');
 
-        string sensorID = parts[0];
+        string ID = parts[0];
         int value;
         if (int.TryParse(parts[1], out value))
         {
-            motorXValue = value;
-            Debug.Log("Motor " + parts[0] +  " Value: " + motorXValue);
+            if (ID == "X0") {
+                motorXValue = 0;
+                motorXChange = true;
+                Debug.Log("Calibrating Motor X");
+            } else if (ID == "Y0") {
+                motorYValue = 0;
+                motorYChange = true;
+                Debug.Log("Calibrating Motor Y");
+            } else if (ID == "X") {
+                motorXValue = value;
+                motorXChange = true;
+                Debug.Log("Motor " + parts[0] +  " Value: " + motorXValue);
+            } else if (ID == "Y") {
+                motorYValue = value;
+                motorYChange = true;
+                Debug.Log("Motor " + parts[0] +  " Value: " + motorYValue);
+            } else{
+                Debug.Log("Did not recognize message with ID: " + parts[0] +  " and Value: " + motorXValue);
+            }
         }
         else
         {
