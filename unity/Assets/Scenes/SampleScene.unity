@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UDPPort: 50195
   displayUDPMessages: 1
-  ipAddress: 10.126.128.222
+  ipAddress: 192.168.229.253
   speed: 15
   stepsPerPress: 100
 --- !u!4 &213427293
