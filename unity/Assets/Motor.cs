@@ -32,14 +32,14 @@ public class Motor : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {   
         if (motorDirection == 'X' && UDPManager.Instance.motorXChange) {
-            RotateObject(UDPManager.Instance.motorXValue, motorAxisVector, 1);
+            RotateObject(UDPManager.Instance.motorXValue, motorAxisVector, 100);
             UDPManager.Instance.motorXChange = false;
         }
         if (motorDirection == 'Y' && UDPManager.Instance.motorYChange) {
-            RotateObject(UDPManager.Instance.motorYValue, motorAxisVector, 1);
+            RotateObject(UDPManager.Instance.motorYValue, motorAxisVector, 100);
             UDPManager.Instance.motorYChange = false;
         }
     }

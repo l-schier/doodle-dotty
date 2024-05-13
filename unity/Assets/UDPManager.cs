@@ -25,6 +25,9 @@ public class UDPManager : MonoBehaviour
     public int motorYValue { get; private set; } = 0;
     public bool motorYChange { get; set; } = false;
 
+    private int trueMotorXValue = 0;
+    private int trueMotorYValue = 0;
+
     void Awake()
     {
         // Assign the instance to this instance, if it is the first one
@@ -53,27 +56,36 @@ public class UDPManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && trueMotorYValue + stepsPerPress <=5200)
         {
+            Debug.Log("trueMotorYValue: " + trueMotorYValue);
             String message = "Y|" + stepsPerPress.ToString() + "|" + speed.ToString();
             SendUDPMessage(message, ipAddress, 3002);
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && trueMotorYValue - stepsPerPress >=0)
         {   
+            Debug.Log("trueMotorYValue: " + trueMotorYValue);
             String message = "Y|-" + stepsPerPress.ToString() + "|" + speed.ToString();
             SendUDPMessage(message, ipAddress, 3002);
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && trueMotorXValue - stepsPerPress >=0)
         {
+            Debug.Log("Left trueMotorXValue: " + trueMotorXValue);
+            String message = "X|" + stepsPerPress.ToString() + "|" + speed.ToString();
+            SendUDPMessage(message, ipAddress, 3002);
+        }
+
+        if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && trueMotorXValue + stepsPerPress <=5200)
+        {
+            Debug.Log(" Right trueMotorXValue: " + trueMotorXValue);
             String message = "X|-" + stepsPerPress.ToString() + "|" + speed.ToString();
             SendUDPMessage(message, ipAddress, 3002);
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            String message = "X|" + stepsPerPress.ToString() + "|" + speed.ToString();
+        if (Input.GetKeyDown(KeyCode.P)) {
+            String message = "CALIBRATE|1";
             SendUDPMessage(message, ipAddress, 3002);
         }
     }
@@ -98,18 +110,22 @@ public class UDPManager : MonoBehaviour
         {
             if (ID == "X0") {
                 motorXValue = 0;
+                trueMotorXValue = 0;
                 motorXChange = true;
-                Debug.Log("Calibrating Motor X");
+                Debug.Log("Calibrated Motor X");
             } else if (ID == "Y0") {
                 motorYValue = 0;
+                trueMotorYValue = 0;
                 motorYChange = true;
-                Debug.Log("Calibrating Motor Y");
+                Debug.Log("Calibrated Motor Y");
             } else if (ID == "X") {
                 motorXValue = value;
+                trueMotorXValue += -value;
                 motorXChange = true;
                 Debug.Log("Motor " + parts[0] +  " Value: " + motorXValue);
             } else if (ID == "Y") {
                 motorYValue = value;
+                trueMotorYValue += value;
                 motorYChange = true;
                 Debug.Log("Motor " + parts[0] +  " Value: " + motorYValue);
             } else{

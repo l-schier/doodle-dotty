@@ -10,6 +10,7 @@ void receiveUDPMessage();
 void setPenState(int state);
 void moveX(int steps, int speed);
 void moveY(int steps, int speed);
+void calibrate();
 
 /* Step motor */
 const int stepsPerRevolution = 2048;
@@ -26,14 +27,14 @@ const int resetButtonPinY = 18;
 
 /* WiFi */
 //Network name (SSID) and password (WPA)
-constexpr char SSID_NAME[] = "ProjektNet";//"Erik";
-constexpr char SSID_PASSWORD[] = "RobotRocks";//"testtest";
+constexpr char SSID_NAME[] = "Erik";//"ProjektNet";//
+constexpr char SSID_PASSWORD[] = "testtest";//"RobotRocks";//
 
 /* UDP */
 WiFiUDP Udp;
 
 //Receiver IP-address and port
-IPAddress RECEIVER_IP_ADDRESS (10, 126, 17, 22);
+IPAddress RECEIVER_IP_ADDRESS (192, 168, 229, 243);
 constexpr int RECEIVER_PORT = 50195;
 constexpr int LOCAL_PORT = 3002;
 
@@ -90,22 +91,7 @@ void setup() {
   Udp.begin(LOCAL_PORT);
   Serial.println("UDP Begun");
 
-  /* Calibration */
-  // Move to the starting position
-  Serial.println("Calibrating...");
-  Serial.println("Calibrate X");
-  while(digitalRead(resetButtonPinX) == LOW) {
-    xStepper.setSpeed(15);
-    xStepper.step(1);
-  }
-  Serial.println("Calibrate Y");
-  while(digitalRead(resetButtonPinY) == LOW) {
-    yStepper.setSpeed(15);
-    yStepper.step(1);
-  }
-  Serial.println("Calibration done");
-
-
+  calibrate();
 }
 
 void loop() {
@@ -126,6 +112,26 @@ void setPenState(int state) {
   sendUDPDataString();
 }
 
+void calibrate() {
+  /* Calibration */
+  // Move to the starting position
+  Serial.println("Calibrating...");
+  Serial.println("Calibrate X");
+  while(digitalRead(resetButtonPinX) == LOW) {
+    xStepper.setSpeed(15);
+    xStepper.step(1);
+  }
+  UDPDataString = "X0|0|15";
+  sendUDPDataString();
+  Serial.println("Calibrate Y");
+  while(digitalRead(resetButtonPinY) == LOW) {
+    yStepper.setSpeed(15);
+    yStepper.step(-1);
+  }
+  UDPDataString = "Y0|0|15";
+  sendUDPDataString();
+  Serial.println("Calibration done");
+}
 /* Step Motor*/
 // move the X axis
 void moveX(int steps, int speed = 15) {
@@ -195,6 +201,9 @@ void receiveUDPMessage() {
     }
     if(strcmp(actuatorID, "Y") == 0) {
       moveY(value1);
+    }
+    if(strcmp(actuatorID, "CALIBRATE") == 0) {
+      calibrate();
     }
   }
 }
