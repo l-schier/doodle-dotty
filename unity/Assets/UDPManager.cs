@@ -25,6 +25,8 @@ public class UDPManager : MonoBehaviour
     public int motorYValue { get; private set; } = 0;
     public bool motorYChange { get; set; } = false;
 
+    public int penState { get; private set; } = 0;
+
     private int trueMotorXValue = 0;
     private int trueMotorYValue = 0;
 
@@ -84,8 +86,21 @@ public class UDPManager : MonoBehaviour
             SendUDPMessage(message, ipAddress, 3002);
         }
 
-        if (Input.GetKeyDown(KeyCode.P)) {
+        if (Input.GetKeyDown(KeyCode.C)) {
             String message = "CALIBRATE|1";
+            SendUDPMessage(message, ipAddress, 3002);
+        }
+
+        if (Input.GetKeyDown(KeyCode.P)) {
+            string message = "";
+            if (penState == 0) {
+                penState = 1;
+                message = "PEN|1";
+            } else {
+                penState = 0;
+                message = "PEN|0";
+                
+            }
             SendUDPMessage(message, ipAddress, 3002);
         }
     }

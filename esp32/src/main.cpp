@@ -69,7 +69,7 @@ void setup() {
   // standard 50 hz servo
 	penServo.setPeriodHertz(50);    
   // attaches the servo to the used pin
-	penServo.attach(servoPin, 1000, 2000);
+	penServo.attach(servoPin);
 
   /* Reset buttons */
   pinMode(resetButtonPinX, INPUT_PULLDOWN);
@@ -104,9 +104,9 @@ void loop() {
 /* Servo */
 void setPenState(int state) {
   if (state == 1) {
-    penServo.write(180);
+    penServo.write(30);
   } else {
-    penServo.write(0);
+    penServo.write(00);
   }
   UDPDataString = "PEN|" + String(state);
   sendUDPDataString();
