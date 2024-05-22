@@ -25,7 +25,9 @@ public class UDPManager : MonoBehaviour
     public int motorYValue { get; private set; } = 0;
     public bool motorYChange { get; set; } = false;
 
-    public int penState { get; private set; } = 0;
+    private int penState { get; set; } = 0;
+
+    public float penAngle { get; private set; } = 0;
 
     private int trueMotorXValue = 0;
     private int trueMotorYValue = 0;
@@ -143,7 +145,14 @@ public class UDPManager : MonoBehaviour
                 trueMotorYValue += value;
                 motorYChange = true;
                 Debug.Log("Motor " + parts[0] +  " Value: " + motorYValue);
-            } else{
+            } else if (ID == "PEN") {
+                if(value == 1) {
+                    penAngle = 30;
+                } else {
+                    penAngle = 0;
+                }
+                Debug.Log("Pen state: " + value + " resulting in pen angle: " + penAngle);
+            } else {
                 Debug.Log("Did not recognize message with ID: " + parts[0] +  " and Value: " + motorXValue);
             }
         }
