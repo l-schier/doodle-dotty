@@ -16,6 +16,7 @@ void calibrate();
 const int stepsPerRevolution = 2048;
 Stepper xStepper(stepsPerRevolution, 16, 21, 17, 22);
 Stepper yStepper(stepsPerRevolution, 4, 25, 32, 27);
+const int stepsPerCommand = 15;
 
 /* Servo */
 Servo penServo;
@@ -112,6 +113,10 @@ void setPenState(int state) {
   sendUDPDataString();
 }
 
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+
 void calibrate() {
   /* Calibration */
   // Move to the starting position
@@ -135,18 +140,33 @@ void calibrate() {
 /* Step Motor*/
 // move the X axis
 void moveX(int steps, int speed = 15) {
-  xStepper.setSpeed(speed);
-  xStepper.step(steps);
-  UDPDataString = "X|" + String(steps) + "|" + String(speed);
-  sendUDPDataString();
+  int takenSteps = 0;
+  while (takenSteps < abs(steps)) {
+    xStepper.setSpeed(speed);
+    xStepper.step(sgn(steps) * stepsPerCommand);
+    Serial.println(sgn(steps) * stepsPerCommand);
+    takenSteps += stepsPerCommand;
+    UDPDataString = "X|" + String(sgn(steps) * stepsPerCommand) + "|" + String(speed);
+    sendUDPDataString();
+  }
 }
 
 // move the Y axis
 void moveY(int steps, int speed = 15) {
-  yStepper.setSpeed(speed);
+  int takenSteps = 0;
+  while (takenSteps < abs(steps)) {
+    yStepper.setSpeed(speed);
+    yStepper.step(sgn(steps) * stepsPerCommand);
+    Serial.println(sgn(steps) * stepsPerCommand);
+    takenSteps += stepsPerCommand;
+    UDPDataString = "Y|" + String(sgn(steps) * stepsPerCommand) + "|" + String(speed);
+    sendUDPDataString();
+  }
+  /*yStepper.setSpeed(speed);
   yStepper.step(steps);
   UDPDataString = "Y|" + String(steps) + "|" + String(speed);
-  sendUDPDataString();
+  sendUDPDataString();*/
+
 }
 
 /* UDP */
