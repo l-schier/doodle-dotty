@@ -28,6 +28,8 @@ public class UDPManager : MonoBehaviour
     private int trueMotorXValue = 0;
     private int trueMotorYValue = 0;
 
+    public bool debug;
+
     void Awake()
     {
         // Assign the instance to this instance, if it is the first one
@@ -44,6 +46,10 @@ public class UDPManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        if(debug){
+            return;
+        }
         //Get IP Address
         DisplayIPAddress();
 
@@ -56,6 +62,12 @@ public class UDPManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if(debug){
+            onlyUnity();
+            return;
+        }
+
         if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && trueMotorYValue + stepsPerPress <=5200)
         {
             Debug.Log("trueMotorYValue: " + trueMotorYValue);
@@ -190,5 +202,59 @@ public class UDPManager : MonoBehaviour
         {
             udpClient.Close();
         }
+    }
+
+    private void onlyUnity(){
+
+        if ((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) && trueMotorYValue + stepsPerPress <=5200)
+        {
+            Debug.Log("trueMotorYValue: " + trueMotorYValue);
+            String message = "Y|" + stepsPerPress.ToString() + "|" + speed.ToString();
+         
+
+            motorYValue = 0;
+                trueMotorYValue = 0;
+                motorYChange = true;
+                Debug.Log("Calibrated Motor Y");
+        }
+
+        if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && trueMotorYValue - stepsPerPress >=0)
+        {   
+            Debug.Log("trueMotorYValue: " + trueMotorYValue);
+            String message = "Y|-" + stepsPerPress.ToString() + "|" + speed.ToString();
+            
+            motorYValue = stepsPerPress;
+            trueMotorYValue += stepsPerPress;
+            motorYChange = true;
+            Debug.Log("Motor y" +  " Value: " + motorYValue);
+        }
+
+        if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && trueMotorXValue - stepsPerPress >=0)
+        {
+            Debug.Log("Left trueMotorXValue: " + trueMotorXValue);
+            String message = "X|" + stepsPerPress.ToString() + "|" + speed.ToString();
+            
+            motorXValue = 0;
+                trueMotorXValue = 0;
+                motorXChange = true;
+                Debug.Log("Calibrated Motor X");
+        }
+
+        if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && trueMotorXValue + stepsPerPress <=5200)
+        {
+            Debug.Log(" Right trueMotorXValue: " + trueMotorXValue);
+            String message = "X|-" + stepsPerPress.ToString() + "|" + speed.ToString();
+            
+            motorXValue = stepsPerPress;
+                trueMotorXValue += -stepsPerPress;
+                motorXChange = true;
+                Debug.Log("Motor X" +  " Value: " + motorXValue);
+        }
+
+        if (Input.GetKeyDown(KeyCode.P)) {
+            String message = "CALIBRATE|1";
+            
+        }
+
     }
 }
