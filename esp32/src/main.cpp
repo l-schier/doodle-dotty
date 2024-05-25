@@ -16,6 +16,7 @@ void calibrate();
 const int stepsPerRevolution = 2048;
 Stepper xStepper(stepsPerRevolution, 16, 21, 17, 22);
 Stepper yStepper(stepsPerRevolution, 4, 25, 32, 27);
+const int stepsPerCommand = 15;
 
 /* Servo */
 Servo penServo;
@@ -69,7 +70,7 @@ void setup() {
   // standard 50 hz servo
 	penServo.setPeriodHertz(50);    
   // attaches the servo to the used pin
-	penServo.attach(servoPin, 1000, 2000);
+	penServo.attach(servoPin);
 
   /* Reset buttons */
   pinMode(resetButtonPinX, INPUT_PULLDOWN);
@@ -104,12 +105,16 @@ void loop() {
 /* Servo */
 void setPenState(int state) {
   if (state == 1) {
-    penServo.write(180);
+    penServo.write(30);
   } else {
-    penServo.write(0);
+    penServo.write(00);
   }
   UDPDataString = "PEN|" + String(state);
   sendUDPDataString();
+}
+
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
 }
 
 void calibrate() {
@@ -135,18 +140,33 @@ void calibrate() {
 /* Step Motor*/
 // move the X axis
 void moveX(int steps, int speed = 15) {
-  xStepper.setSpeed(speed);
-  xStepper.step(steps);
-  UDPDataString = "X|" + String(steps) + "|" + String(speed);
-  sendUDPDataString();
+  int takenSteps = 0;
+  while (takenSteps < abs(steps)) {
+    xStepper.setSpeed(speed);
+    xStepper.step(sgn(steps) * stepsPerCommand);
+    Serial.println(sgn(steps) * stepsPerCommand);
+    takenSteps += stepsPerCommand;
+    UDPDataString = "X|" + String(sgn(steps) * stepsPerCommand) + "|" + String(speed);
+    sendUDPDataString();
+  }
 }
 
 // move the Y axis
 void moveY(int steps, int speed = 15) {
-  yStepper.setSpeed(speed);
+  int takenSteps = 0;
+  while (takenSteps < abs(steps)) {
+    yStepper.setSpeed(speed);
+    yStepper.step(sgn(steps) * stepsPerCommand);
+    Serial.println(sgn(steps) * stepsPerCommand);
+    takenSteps += stepsPerCommand;
+    UDPDataString = "Y|" + String(sgn(steps) * stepsPerCommand) + "|" + String(speed);
+    sendUDPDataString();
+  }
+  /*yStepper.setSpeed(speed);
   yStepper.step(steps);
   UDPDataString = "Y|" + String(steps) + "|" + String(speed);
-  sendUDPDataString();
+  sendUDPDataString();*/
+
 }
 
 /* UDP */

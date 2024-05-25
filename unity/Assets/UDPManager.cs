@@ -25,6 +25,10 @@ public class UDPManager : MonoBehaviour
     public int motorYValue { get; private set; } = 0;
     public bool motorYChange { get; set; } = false;
 
+    private int penState { get; set; } = 0;
+
+    public float penAngle { get; private set; } = 0;
+
     private int trueMotorXValue = 0;
     private int trueMotorYValue = 0;
 
@@ -96,8 +100,21 @@ public class UDPManager : MonoBehaviour
             SendUDPMessage(message, ipAddress, 3002);
         }
 
-        if (Input.GetKeyDown(KeyCode.P)) {
+        if (Input.GetKeyDown(KeyCode.C)) {
             String message = "CALIBRATE|1";
+            SendUDPMessage(message, ipAddress, 3002);
+        }
+
+        if (Input.GetKeyDown(KeyCode.P)) {
+            string message = "";
+            if (penState == 0) {
+                penState = 1;
+                message = "PEN|1";
+            } else {
+                penState = 0;
+                message = "PEN|0";
+                
+            }
             SendUDPMessage(message, ipAddress, 3002);
         }
     }
@@ -140,7 +157,14 @@ public class UDPManager : MonoBehaviour
                 trueMotorYValue += value;
                 motorYChange = true;
                 Debug.Log("Motor " + parts[0] +  " Value: " + motorYValue);
-            } else{
+            } else if (ID == "PEN") {
+                if(value == 1) {
+                    penAngle = 30;
+                } else {
+                    penAngle = 0;
+                }
+                Debug.Log("Pen state: " + value + " resulting in pen angle: " + penAngle);
+            } else {
                 Debug.Log("Did not recognize message with ID: " + parts[0] +  " and Value: " + motorXValue);
             }
         }
