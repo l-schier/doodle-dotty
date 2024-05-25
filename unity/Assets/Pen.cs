@@ -32,7 +32,7 @@ public class Pen : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        RotateObject(UDPManager.Instance.penAngle);
+        RotateObject(UDPManager.Instance.penAngle * -1);
     }
 
     private void RotateObject(float value) {

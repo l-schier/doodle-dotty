@@ -277,6 +277,13 @@ public class UDPManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.P)) {
             String message = "CALIBRATE|1";
+            if(penAngle == -30)
+            {
+                penAngle = 0;
+            } else
+            {
+                penAngle = -30;
+            }
             
         }
 
