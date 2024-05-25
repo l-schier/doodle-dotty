@@ -212,8 +212,8 @@ public class UDPManager : MonoBehaviour
             String message = "Y|" + stepsPerPress.ToString() + "|" + speed.ToString();
          
 
-            motorYValue = 0;
-                trueMotorYValue = 0;
+            motorYValue = stepsPerPress;
+                trueMotorYValue = stepsPerPress;
                 motorYChange = true;
                 Debug.Log("Calibrated Motor Y");
         }
@@ -234,8 +234,8 @@ public class UDPManager : MonoBehaviour
             Debug.Log("Left trueMotorXValue: " + trueMotorXValue);
             String message = "X|" + stepsPerPress.ToString() + "|" + speed.ToString();
             
-            motorXValue = 0;
-                trueMotorXValue = 0;
+            motorXValue = stepsPerPress;
+                trueMotorXValue = stepsPerPress;
                 motorXChange = true;
                 Debug.Log("Calibrated Motor X");
         }
