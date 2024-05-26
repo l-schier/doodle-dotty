@@ -28,8 +28,8 @@ const int resetButtonPinY = 18;
 
 /* WiFi */
 //Network name (SSID) and password (WPA)
-constexpr char SSID_NAME[] = "Tes"; //"Erik";//"ProjektNet";//
-constexpr char SSID_PASSWORD[] = "fairytail"; //"testtest";//"RobotRocks";//
+constexpr char SSID_NAME[] = "Erik";//"ProjektNet";//
+constexpr char SSID_PASSWORD[] = "testtest";//"RobotRocks";//
 
 /* UDP */
 WiFiUDP Udp;
