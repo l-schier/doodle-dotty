@@ -28,8 +28,8 @@ const int resetButtonPinY = 18;
 
 /* WiFi */
 //Network name (SSID) and password (WPA)
-constexpr char SSID_NAME[] = "Erik";//"ProjektNet";//
-constexpr char SSID_PASSWORD[] = "testtest";//"RobotRocks";//
+constexpr char SSID_NAME[] = "Tes"; //"Erik";//"ProjektNet";//
+constexpr char SSID_PASSWORD[] = "fairytail"; //"testtest";//"RobotRocks";//
 
 /* UDP */
 WiFiUDP Udp;
@@ -76,12 +76,19 @@ void setup() {
   pinMode(resetButtonPinX, INPUT_PULLDOWN);
   pinMode(resetButtonPinY, INPUT_PULLDOWN);
 
+
+  const int max_attempts = 20;
+  int attempts = 0;
+
   /* WiFi */
   //Begin WiFi
   WiFi.begin(SSID_NAME, SSID_PASSWORD);
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED && attempts < max_attempts) {
     Serial.print("Attempting to connect to SSID: ");
     Serial.println(SSID_NAME);
+    Serial.print("Current status: ");
+    Serial.println(WiFi.status());
+    attempts++;
     delay(1000);
   }
   Serial.println("Connected to WiFi");
