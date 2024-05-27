@@ -162,8 +162,10 @@ public class UDPManager : MonoBehaviour
                 Debug.Log("Motor " + parts[0] +  " Value: " + motorYValue);
             } else if (ID == "PEN") {
                 if(value == 1) {
+                    penState = 1;
                     penAngle = 30;
                 } else {
+                    penState = 0;
                     penAngle = 0;
                 }
                 Debug.Log("Pen state: " + value + " resulting in pen angle: " + penAngle);
@@ -240,9 +242,9 @@ public class UDPManager : MonoBehaviour
          
 
             motorYValue = stepsPerPress;
-                trueMotorYValue = stepsPerPress;
-                motorYChange = true;
-                Debug.Log("Calibrated Motor Y");
+            trueMotorYValue += stepsPerPress;
+            motorYChange = true;
+            Debug.Log("Calibrated Motor Y");
         }
 
         if ((Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) && trueMotorYValue - stepsPerPress >=0)
@@ -250,8 +252,8 @@ public class UDPManager : MonoBehaviour
             Debug.Log("trueMotorYValue: " + trueMotorYValue);
             String message = "Y|-" + stepsPerPress.ToString() + "|" + speed.ToString();
             
-            motorYValue = stepsPerPress;
-            trueMotorYValue += stepsPerPress;
+            motorYValue = -stepsPerPress;
+            trueMotorYValue += -stepsPerPress;
             motorYChange = true;
             Debug.Log("Motor y" +  " Value: " + motorYValue);
         }
@@ -261,10 +263,10 @@ public class UDPManager : MonoBehaviour
             Debug.Log("Left trueMotorXValue: " + trueMotorXValue);
             String message = "X|" + stepsPerPress.ToString() + "|" + speed.ToString();
             
-            motorXValue = stepsPerPress;
-                trueMotorXValue = stepsPerPress;
-                motorXChange = true;
-                Debug.Log("Calibrated Motor X");
+            motorXValue = -stepsPerPress;
+            trueMotorXValue += -stepsPerPress;
+            motorXChange = true;
+            Debug.Log("Calibrated Motor X");
         }
 
         if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && trueMotorXValue + stepsPerPress <=5200)
@@ -273,19 +275,19 @@ public class UDPManager : MonoBehaviour
             String message = "X|-" + stepsPerPress.ToString() + "|" + speed.ToString();
             
             motorXValue = stepsPerPress;
-                trueMotorXValue += -stepsPerPress;
-                motorXChange = true;
-                Debug.Log("Motor X" +  " Value: " + motorXValue);
+            trueMotorXValue += stepsPerPress;
+            motorXChange = true;
+            Debug.Log("Motor X" +  " Value: " + motorXValue);
         }
 
         if (Input.GetKeyDown(KeyCode.P)) {
             String message = "CALIBRATE|1";
-            if(penAngle == -30)
+            if(penAngle == 30)
             {
                 penAngle = 0;
             } else
             {
-                penAngle = -30;
+                penAngle = 30;
             }
             
         }

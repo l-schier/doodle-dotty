@@ -5,7 +5,7 @@ using UnityEngine;
 public class Pen : MonoBehaviour
 {
     [SerializeField] private char penAxis = 'X';
-    [SerializeField] private int restingPenPosition = 0;
+    //[SerializeField] private int restingPenPosition = 0;
     // Start is called before the first frame update
 
     [SerializeField] private float minInputValue = 0f;
@@ -32,7 +32,7 @@ public class Pen : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        RotateObject(UDPManager.Instance.penAngle * -1);
+        RotateObject(UDPManager.Instance.penAngle);
     }
 
     private void RotateObject(float value) {
@@ -40,13 +40,13 @@ public class Pen : MonoBehaviour
         Vector3 rotationVector = new Vector3(initialRotationX, initialRotationY, initialRotationZ);
         switch (penAxis) {
             case 'X':
-                rotationVector = new Vector3(mappedRotation, initialRotationY, initialRotationZ);
+                rotationVector = new Vector3(-mappedRotation, initialRotationY, initialRotationZ);
                 break;
             case 'Y':
-                rotationVector = new Vector3(initialRotationX, mappedRotation, initialRotationZ);
+                rotationVector = new Vector3(initialRotationX, -mappedRotation, initialRotationZ);
                 break;
             case 'Z':
-                rotationVector = new Vector3(initialRotationX, initialRotationY, mappedRotation);
+                rotationVector = new Vector3(initialRotationX, initialRotationY, -mappedRotation);
                 break;
             default:
                 Debug.LogError("Invalid pen axis");
