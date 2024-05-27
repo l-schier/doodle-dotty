@@ -47,7 +47,7 @@ public class Motor : MonoBehaviour
             UDPManager.Instance.motorXChange = false;
         }
         if (motorDirection == 'Y' && UDPManager.Instance.motorYChange) {
-            RotateObject(UDPManager.Instance.motorYValue, motorAxisVector, 100);
+            RotateObject(-UDPManager.Instance.motorYValue, motorAxisVector, 100);
             UDPManager.Instance.motorYChange = false;
         }
 

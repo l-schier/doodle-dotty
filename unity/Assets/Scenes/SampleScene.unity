@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1299,11 +1299,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UDPPort: 50195
-  displayUDPMessages: 0
+  displayUDPMessages: 1
   ipAddress: 192.168.229.253
   speed: 15
   stepsPerPress: 100
-  debug: 1
+  debug: 0
 --- !u!4 &213427293
 Transform:
   m_ObjectHideFlags: 0
@@ -1671,10 +1671,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   penAxis: 89
-  restingPenPosition: 0
   minInputValue: 0
   maxInputValue: 180
-  minRotationDegree: -30
+  minRotationDegree: 0
   maxRotationDegree: 180
 --- !u!64 &515509843
 MeshCollider:
@@ -3061,13 +3060,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2792978, y: -0, z: -0, w: 0.9602045}
-  m_LocalPosition: {x: -25, y: 25, z: -20}
+  m_LocalRotation: {x: -0, y: 0.9806509, z: -0.19576494, w: 0}
+  m_LocalPosition: {x: -25, y: 30, z: 60}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 32.437, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 22.579, y: 180, z: 0}
 --- !u!64 &993762174
 MeshCollider:
   m_ObjectHideFlags: 0

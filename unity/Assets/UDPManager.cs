@@ -144,11 +144,13 @@ public class UDPManager : MonoBehaviour
                 motorXValue = 0;
                 trueMotorXValue = 0;
                 motorXChange = true;
+                motorXConfigured = true;
                 Debug.Log("Calibrated Motor X");
             } else if (ID == "Y0") {
                 motorYValue = 0;
                 trueMotorYValue = 0;
                 motorYChange = true;
+                motorYConfigured = true;
                 Debug.Log("Calibrated Motor Y");
             } else if (ID == "X") {
                 motorXValue = value;
