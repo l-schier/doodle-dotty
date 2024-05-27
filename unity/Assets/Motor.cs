@@ -4,6 +4,8 @@ public class Motor : MonoBehaviour
 {
     [SerializeField] private char motorAxis = 'X';
     [SerializeField] private char motorDirection = 'X';
+    private Vector3 xReset;
+    private Vector3 yReset;
     private Vector3 motorAxisVector;
     //[SerializeField] private float degreesPerSecond = 360f
     
@@ -29,11 +31,17 @@ public class Motor : MonoBehaviour
                 Debug.LogError("Invalid motor axis");
                 break;
         }
+
+        xReset = GameObject.FindWithTag("xRag").transform.position;
+        yReset = GameObject.FindWithTag("yRag").transform.position;
+
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {   
+
+
         if (motorDirection == 'X' && UDPManager.Instance.motorXChange) {
             RotateObject(UDPManager.Instance.motorXValue, motorAxisVector, 100);
             UDPManager.Instance.motorXChange = false;
@@ -42,6 +50,26 @@ public class Motor : MonoBehaviour
             RotateObject(UDPManager.Instance.motorYValue, motorAxisVector, 100);
             UDPManager.Instance.motorYChange = false;
         }
+
+        if (motorDirection == 'X' && UDPManager.Instance.motorXConfigured){
+            GameObject rag = GameObject.FindWithTag("xRag");
+            if (rag != null && Vector3.Distance(rag.transform.position, xReset)  > 0.5){
+                RotateObject(10, motorAxisVector, 100);
+            }else {
+                UDPManager.Instance.motorXConfigured = false;
+            }
+        }
+
+        if (motorDirection == 'Y' && UDPManager.Instance.motorYConfigured){
+            GameObject rag = GameObject.FindWithTag("yRag");
+            if (rag != null && Vector3.Distance(rag.transform.position, yReset)  > 0.5){
+                RotateObject(10, motorAxisVector, 100);
+            }else {
+                UDPManager.Instance.motorYConfigured = false;
+            }
+        }
+
+      
     }
 
     private void RotateObject(float steps, Vector3 axis, float inTime)

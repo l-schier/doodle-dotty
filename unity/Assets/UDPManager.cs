@@ -25,6 +25,9 @@ public class UDPManager : MonoBehaviour
     public int motorYValue { get; private set; } = 0;
     public bool motorYChange { get; set; } = false;
 
+    public bool motorXConfigured { get; set; } = false;
+    public bool motorYConfigured { get; set; } = false;
+
     private int penState { get; set; } = 0;
 
     public float penAngle { get; private set; } = 0;
@@ -284,6 +287,12 @@ public class UDPManager : MonoBehaviour
             {
                 penAngle = -30;
             }
+            
+        }
+
+        if (Input.GetKeyDown(KeyCode.C)) {
+            motorXConfigured = true;
+            motorYConfigured = true;
             
         }
 
